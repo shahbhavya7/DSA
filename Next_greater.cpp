@@ -47,37 +47,35 @@ public:
 //  }
 
 //- Optimal
- vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
-    vector<int> ans;
+  vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+    unordered_map<int, int> nextGreater;
     stack<int> st;
-    for (int i = nums2.size()-1; i >=0 ; i--) {
-        int element = nums2[i];
-
-        if(st.empty()){
-            st.push(element);
-            ans.push_back(-1);
-            continue;
-        }
-        // if stack top is greater than element
-        if(st.top()>element){
-            st.push(element);
-            ans.push_back(st.top());
-            continue;
-        }
-        // if stack top is less than element keep removing elements from stack untill stack top is greater than element
-        while(!st.empty() && st.top()<=element){
+    
+    // Process nums2 from right to left to find next greater elements
+    for (int i = nums2.size() - 1; i >= 0; --i) {
+        int num = nums2[i];
+        // Pop elements from the stack that are less than or equal to current num
+        while (!st.empty() && st.top() <= num) {
             st.pop();
         }
-        if(st.empty()){
-            ans.push_back(-1);
+        // If stack is empty, no greater element exists
+        if (st.empty()) {
+            nextGreater[num] = -1;
+        } else {
+            nextGreater[num] = st.top();
         }
-        else{
-            ans.push_back(st.top());
-        }
-        st.push(element); // push the current element to the stack after popping all elements greater than it
+        // Push current num onto the stack
+        st.push(num);
     }
-    return ans;
- }
+    
+    // Build the result for nums1 using the map
+    vector<int> result;
+    for (int num : nums1) {
+        result.push_back(nextGreater[num]);
+    }
+    
+    return result;
+}
 };
 
 int main(){
