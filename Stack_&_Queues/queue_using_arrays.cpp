@@ -1,52 +1,65 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
-class ArrayQueue {
+class ArrayQueue
+{
 public:
     int MAX_SIZE = 1000;
     int frontIndex = -1;
     int rearIndex = -1;
     int arr[1000];
-    ArrayQueue() {
+    ArrayQueue()
+    {
     }
-    
-    void push(int x) {
-        if(rearIndex == MAX_SIZE - 1){
-            cout<< "Queue Overflow" << endl;
+
+    void push(int x)
+    {
+        if (rearIndex == MAX_SIZE - 1)
+        {
+            cout << "Queue Overflow" << endl;
             return;
         }
-        else{
+        else
+        {
             rearIndex++;
             arr[rearIndex] = x;
         }
     }
-    
-    int pop() {
-        if(frontIndex == rearIndex){
+
+    int pop()
+    {
+        if (frontIndex == rearIndex)
+        {
             return -1;
         }
-        else{
+        else
+        {
             frontIndex++;
             int x = arr[frontIndex];
             return x;
         }
     }
-    
-    int peek() {
-        if(frontIndex == rearIndex){
+
+    int peek()
+    {
+        if (frontIndex == rearIndex)
+        {
             return -1;
         }
-        else{
+        else
+        {
             return arr[frontIndex + 1];
         }
     }
-    
-    bool isEmpty() {
+
+    bool isEmpty()
+    {
         return (frontIndex == rearIndex);
     }
 };
 
-int main(){
+int main()
+{
     ArrayQueue queue;
     queue.push(10);
     queue.push(2);
