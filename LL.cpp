@@ -25,6 +25,9 @@ public:
     void Insert(int index, int x); //- Insert a node at a given index
     int Delete(int index);         //- Delete a node at a given index
     int Length();                  //- Return the length of the linked list
+    int sum();                    //- Return the sum of all elements in the linked list
+    int Max();                    //- Return the maximum element in the linked list
+    Node search(int key);        //- Search for a node with a given key and return the node if found, otherwise return NULL
 };
 
 //- Important Note: 
@@ -98,11 +101,118 @@ int LinkedList::Length()
     return len;
 }
 
+int LinkedList::sum(){
+    int sum = 0; // initialize sum to 0
+    Node *p = head; // initialize pointer p to head node
+    while(p){
+        sum += p->data;
+        p = p->next;
+    }
+    return sum;
+}
+
+int LinkedList::Max(){
+    int max = INT_MIN; // initialize max to minimum integer value
+    Node *p = head;
+    while(p){
+        if(p->data > max){
+            max = p->data; // update max if current node's data is greater than max
+        }
+        p = p->next; // move to the next node
+    }
+    return max; // return the maximum value found in the linked list
+}
+
+Node LinkedList::search(int key){
+    Node *p = head;
+    while(p){
+        if(p->data == key){
+            return *p;
+        }
+        p = p->next; // move to the next node
+
+    }
+    return Node(); // return NULL if key is not found
+}
+
+void LinkedList::Insert(int index, int x){ // index here is position starting from 0, so if index is 0 then it will insert at the beginning
+    Node *p,*t;
+    if(index < 0 || index > Length()){
+        cout << "Invalid index" << endl;
+        return;
+    }
+    if(index == 0){
+        t = new Node;
+        t->data = x;
+        t->next = head;
+        head = t; // insert at the beginning
+    }
+    else{
+        p = head;
+        for (int i = 0; i < index-1 && p; i++) {
+            p = p->next; // traverse to the node before the index
+        }
+        if(p){
+            t = new Node;
+            t->data = x; // create a new node with data x
+            t->next = p->next; // link the new node to the next node
+            p->next = t; // link the previous node to the new node
+        }
+        else {
+            cout << "Index out of bounds" << endl; // if p is NULL, index is out of bounds
+        }
+    }
+}
+
+int LinkedList::Delete(int index){ // index here is position starting from 1, so if index is 1 then it will delete the first node
+    Node *p,*q =NULL;
+    int x = -1;
+    if(index < 1 || index > Length()){
+        cout << "Invalid index" << endl;
+        return -1; // if the index is invalid
+    }
+    if(index == 1){
+        p=head;
+        head = head->next; // if the node to be deleted is the first node
+        x = p->data; // store the data of the node to be deleted
+        delete p; // free the memory allocated to the node
+    }
+    else{
+        p = head;
+        for (int i = 0; i < index - 1 && p ; i++) {
+            q = p; // keep track of the previous node
+            p = p->next; // move to the next node
+        }
+        q->next = p->next; // link the previous node to the next node of the node to be deleted
+        x = p->data; // store the data of the node to be deleted
+        delete p; // free the memory allocated to the node
+    }
+    return x; // return the data of the deleted node
+}
+
 int main()
 {
     int A[] = {1, 2, 3, 4, 5};
     LinkedList l(A, 5);
     l.Display();
     cout << "Length of linked list: " << l.Length() << endl;
+    cout << "Sum of elements in linked list: " << l.sum() << endl;
+    cout << "Maximum element in linked list: " << l.Max() << endl;
+    int key = 3;
+    Node result = l.search(key);
+    if (result.data != 0) {
+        cout << "Node with key " << key << " found with data: " << result.data << " at address: " << &result << endl;
+    } else {
+        cout << "Node with key " << key << " not found." << endl;
+    }
+    l.Insert(2, 10); // Insert 10 at index 2
+    l.Display(); // Display the linked list after insertion
+    int deletedValue = l.Delete(3); // Delete the node at index 3
+    if (deletedValue != -1) {
+        cout << "Deleted node with value: " << deletedValue << endl;
+    } else {
+        cout << "Deletion failed." << endl;
+    }
+    l.Display(); // Display the linked list after deletion
     return 0;
 }
