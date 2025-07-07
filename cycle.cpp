@@ -61,7 +61,7 @@ void LinkedList::Display()
     cout << endl;
 }
 
-bool LinkedList::iscycle(){
+bool LinkedList::iscycle(){ // using Floyd's Cycle Detection Algorithm (Tortoise and Hare)
     Node *slow = head;
     Node *fast = head;
 
